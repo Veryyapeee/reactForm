@@ -48,19 +48,13 @@ const formStructure = (props: Props) => {
     return (
       <Input
         key={input.id}
-        type={input.config.type}
-        inputType={input.config.inputType}
-        placeholder={input.config.placeholder}
-        inputValue={input.config.val}
         onChangeInput={(e: { target: HTMLInputElement }) =>
           onChangeInput(e, input.id)
         }
         inputName={input.name}
-        label={input.config.label}
-        validity={input.config.valid}
+        {...input.config}
         touched={input.config.touched}
         stateMain={props.state}
-        error={input.config.error}
       />
     );
   });

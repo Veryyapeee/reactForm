@@ -4,17 +4,17 @@ import styles from "./input.module.scss";
 
 interface Props {
   type: string;
-  placeholder: string;
+  inputType: string;
   inputValue: string;
-  onChangeInput: any;
+  inputName: string;
+  inputSelectName?: string;
+  placeholder: string;
   label: string;
   validity: boolean;
   touched: boolean;
-  inputType: string;
-  stateMain?: any;
-  name?: string;
-  error?: string;
-  inputName: string;
+  state?: any;
+  errorMessage?: string;
+  onChangeInput: any;
 }
 
 const input: FunctionComponent<Props> = (props) => {
@@ -25,8 +25,8 @@ const input: FunctionComponent<Props> = (props) => {
 
   let selectOptions = [];
   if (props.inputType === "select") {
-    for (let key in props.stateMain[props.inputName].options) {
-      selectOptions.push(props.stateMain[props.inputName].options[key]);
+    for (let key in props.state[props.inputName].options) {
+      selectOptions.push(props.state[props.inputName].options[key]);
     }
   }
 
@@ -69,7 +69,7 @@ const input: FunctionComponent<Props> = (props) => {
           <span className={styles.label}>{props.label}</span>
           <label className={inputClasses.join(" ")}>
             <select
-              name={props.name}
+              name={props.inputSelectName}
               value={props.inputValue}
               onChange={props.onChangeInput}
               className={styles.select}
@@ -88,14 +88,7 @@ const input: FunctionComponent<Props> = (props) => {
       break;
   }
 
-  return (
-    <>
-      {input}{" "}
-      {!props.validity && props.touched && props.error && (
-        <span className={styles.error}>{props.error}</span>
-      )}
-    </>
-  );
+  return <>{input}</>;
 };
 
 export default input;
