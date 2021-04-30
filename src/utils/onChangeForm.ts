@@ -10,7 +10,7 @@ interface Rules {
   @param {value} - input value
   @param {rules} - object with validation rules
 */
-const validation = (value: string, rules?: Rules) => {
+export const validation = (value: string, rules?: Rules) => {
     let isValid: any = true;
     if (!rules) {
         return true;
@@ -39,7 +39,7 @@ const validation = (value: string, rules?: Rules) => {
 /* Check if every input is valid
   @param {fields} - object with all form fields
 */
-const wholeFormValidity = (fields: any) => {
+export const wholeFormValidity = (fields: any) => {
     let key: keyof typeof fields;
     for (key in fields) {
         if (fields[key].valid === false) {
@@ -56,7 +56,7 @@ const wholeFormValidity = (fields: any) => {
   @param {valid} - value which represents validity of whole form
   @param {passwordCheck} - boolean value to pass if we have to check if passwords are matching
 */
-const mutateState = (
+export const mutateState = (
     e: { target: HTMLInputElement },
     inputType: string,
     stateCopy: any,
@@ -111,7 +111,7 @@ const mutateState = (
     @param {state} - state
     @param {checkPass} - boolean value to pass if we have to check if passwords are matching
 */
-const onChangeForm = (e: { target: HTMLInputElement }, inputType: any, state: any, setState: any, checkPass?: boolean) => {
+export const onChangeForm = (e: { target: HTMLInputElement }, inputType: any, state: any, setState: any, checkPass?: boolean) => {
 
     const stateCopy = { ...state };
     const inputField = {

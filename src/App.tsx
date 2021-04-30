@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import FormStructure from "containers/form/form";
 
+import useForm from "Hooks/useForm";
+
 function App() {
-  const [form, setForm] = useState({
+  const [form, setForm, data] = useForm({
     email: {
       val: "",
       type: "email",
@@ -33,6 +35,11 @@ function App() {
     },
     formValid: false,
   });
+
+  const dupa = (e: any) => {
+    e.preventDefault();
+    console.log(data);
+  };
   return (
     <span>
       Hello word!
@@ -41,7 +48,7 @@ function App() {
         setState={setForm}
         btnText="SIGN UP"
         title="Sign Up"
-        submitted={() => console.log("test")}
+        submitted={dupa}
       />
     </span>
   );
