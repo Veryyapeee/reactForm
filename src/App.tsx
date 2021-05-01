@@ -35,6 +35,38 @@ function App() {
       touched: false,
       valid: false,
     },
+    costam: {
+      val: "",
+      inputType: types.SELECT.SELECT,
+      label: "whatever",
+      valid: true,
+      options: {
+        option1: {
+          name: "xD",
+          val: "xD",
+        },
+        option2: {
+          name: "lol",
+          val: "lol",
+        },
+      },
+    },
+    costam2: {
+      val: "",
+      valid: true,
+      inputType: types.SELECT.SELECT,
+      label: "whatever",
+      options: {
+        option1: {
+          name: "xD2",
+          val: "xD2",
+        },
+        option2: {
+          name: "lol2",
+          val: "lol2",
+        },
+      },
+    },
     formValid: false,
   });
 
@@ -45,11 +77,11 @@ function App() {
     <span>
       Hello word!
       <FormStructure
-        state={form}
-        setState={setForm}
-        btnText="SIGN UP"
-        title="Sign Up"
-        submitted={test}
+        config={form}
+        setConfig={setForm}
+        buttonTitle="SIGN UP"
+        formTitle="Sign Up"
+        onSubmit={test}
       />
     </span>
   );

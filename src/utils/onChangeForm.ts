@@ -2,8 +2,9 @@ interface Rules {
     required?: boolean;
     minLength?: number;
     maxLength?: number;
-    minDate?: Date
-    passwordRule: boolean;
+    minDate?: Date;
+    validEmail?: boolean;
+    validPassword?: boolean;
 }
 
 /* Input data validation 
@@ -28,10 +29,15 @@ export const validation = (value: string, rules?: Rules) => {
     if (rules.minDate) {
         isValid = new Date(value) >= rules.minDate && isValid;
     }
-
-    if (rules.passwordRule) {
-        isValid = value.match(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?\W).*$/) && isValid;
-    }
+    /* 
+        if (rules.validPassword) {
+            console.log(value);
+            isValid = value.match(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/) && isValid;
+        }
+    
+        if (rules.validEmail) {
+            isValid = value.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/) && isValid;
+        } */
 
     return isValid;
 };

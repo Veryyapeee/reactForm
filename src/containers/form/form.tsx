@@ -4,47 +4,52 @@ import Input from "components/input/input";
 import Button from "components/button/button";
 
 import onChangeForm from "utils/onChangeForm";
-
-import styles from "./form.module.scss";
-
 interface Props {
-  state: any;
-  title: string;
-  setState: any;
-  btnText: string;
-  submitted: any;
-  children?: JSX.Element;
+  config: any;
+  setConfig: any;
+  buttonTitle: string;
+  onSubmit: () => void;
+  formTitle?: string;
+  children?: JSX.Element | JSX.Element[] | string;
   checkPass?: boolean;
-  spinner?: boolean;
-  directionClass?: string;
 }
 
-const formStructure = (props: Props) => {
-  let key: typeof props.state;
+interface Element {
+  id: string;
+  name: string;
+  config: any;
+}
+
+type E = React.FormEvent<HTMLFormElement>;
+
+const formStructure: React.FC<Props> = (props) => {
+  // Get input config
+  let key: typeof props.config;
   let elements = [];
-  for (key in props.state) {
+  for (key in props.config) {
     elements.push({
       id: key,
       name: key,
-      config: props.state[key],
+      config: props.config[key],
     });
   }
 
+  // Function for mutate, validate and return new state when change input value
   const onChangeInput = (
     event: { target: HTMLInputElement },
-    inputType: typeof props.state
+    inputType: typeof props.config
   ) => {
-    /* Mutate, save and valid state */
     onChangeForm(
       event,
       inputType,
-      props.state,
-      props.setState,
+      props.config,
+      props.setConfig,
       props.checkPass
     );
   };
 
-  const formElements = elements.map((input: any) => {
+  // Create inputs for form
+  const formElements = elements.map((input: Element) => {
     return (
       <Input
         key={input.id}
@@ -53,37 +58,22 @@ const formStructure = (props: Props) => {
         }
         inputName={input.name}
         {...input.config}
-        touched={input.config.touched}
-        stateMain={props.state}
+        stateMain={props.config}
       />
     );
   });
 
   return (
-    <div className={styles.formWrapper}>
-      <span className={styles.formTitle}>{props.title}</span>
+    <div>
+      <span>{props.formTitle}</span>
       <form
-        onSubmit={(event) => {
+        onSubmit={(event: E) => {
           event.preventDefault();
-          props.submitted();
+          props.onSubmit();
         }}
-        className={styles.formColumn}
       >
-        <div
-          className={
-            props.directionClass
-              ? styles[props.directionClass]
-              : styles.formColumn
-          }
-        >
-          {formElements}
-        </div>{" "}
-        {props.children}
-        {/* {props.spinner ? (
-          <Spinner animation="border" style={{ color: "#02ADDB" }} />
-        ) : ( */}
-        <Button disabled={!props.state.formValid}>{props.btnText}</Button>
-        {/*  )} */}
+        <div>{formElements}</div> {props.children}
+        <Button disabled={!props.config.formValid}>{props.buttonTitle}</Button>
       </form>
     </div>
   );

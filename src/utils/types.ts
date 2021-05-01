@@ -62,10 +62,10 @@ export interface Textarea {
 }
 
 // Select
-export interface ValidationSelect {
-    required?: boolean;
-}
 
+export interface SelectValidation {
+    required: boolean;
+}
 export interface SelectOption {
     optionVal: string;
     optionName: string;
@@ -79,9 +79,8 @@ export interface Select {
     val: string;
     inputType: type.SELECT;
     label: string;
-    validation?: ValidationSelect;
-    touched: boolean;
     valid: boolean;
+    validation: SelectValidation;
     errorMessage?: string;
     options: SelectOptionName[];
 }
