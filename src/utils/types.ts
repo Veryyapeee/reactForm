@@ -1,83 +1,69 @@
+import * as type from './enums';
+
 // Objects in custom Hook
 
 // Input type text
 export interface ValidationInputText {
-    required: boolean;
-    minLength: number;
-    maxLength: number;
+    required?: boolean;
+    minLength?: number;
+    maxLength?: number;
+    validEmail?: boolean;
+    validPassword?: boolean;
+    checkPasswordMatch?: boolean
 }
 
 export interface InputText {
     val: string;
-    type: string;
-    inputType: string;
+    type: type.TYPE;
+    inputType: type.INPUT;
     placeholder: string;
     label: string;
     touched: boolean;
     valid: boolean;
-    errorMessage: string;
-    validation: ValidationInputText;
-}
-
-// Input type email
-export interface ValidationInputEmail {
-    required: boolean;
-    minLength: number;
-    maxLength: number;
-    validEmail: boolean;
-}
-
-export interface InputEmail {
-    val: string;
-    type: string;
-    inputType: string;
-    placeholder: string;
-    label: string;
-    touched: boolean;
-    valid: boolean;
-    errorMessage: string;
-    validation: ValidationInputEmail;
+    errorMessage?: string;
+    validation?: ValidationInputText;
 }
 
 // Input type date
 export interface ValidationInputDate {
-    required: boolean;
-    minDate: Date;
+    required?: boolean;
+    minDate?: Date;
+    maxDate?: Date;
 }
 
 export interface InputDate {
     val: string;
-    type: string;
-    inputType: string;
+    type: type.TYPEDATE;
+    inputType: type.INPUT;
     placeholder: string;
     label: string;
     touched: boolean;
     valid: boolean;
-    errorMessage: string;
-    validation: ValidationInputDate;
+    errorMessage?: string;
+    validation?: ValidationInputDate;
 }
 
 // Textarea
 export interface ValidationTextarea {
-    required: boolean;
-    minLength: number;
-    maxLength: number;
+    required?: boolean;
+    minLength?: number;
+    maxLength?: number;
 }
 
 export interface Textarea {
     val: string;
-    type: string;
+    inputType: type.TEXTAREA;
     placeholder: string;
     label: string;
     touched: boolean;
     valid: boolean;
-    errorMessage: string;
-    validation: ValidationTextarea;
+    errorMessage?: string;
+    validation?: ValidationTextarea;
 }
 
 // Select
 export interface ValidationSelect {
-    required: boolean;
+    required?: boolean;
 }
 
 export interface SelectOption {
@@ -91,11 +77,19 @@ export interface SelectOptionName {
 
 export interface Select {
     val: string;
-    inputType: string;
+    inputType: type.SELECT;
     label: string;
-    validation: ValidationSelect;
+    validation?: ValidationSelect;
     touched: boolean;
     valid: boolean;
-    errorMessage: string;
+    errorMessage?: string;
     options: SelectOptionName[];
+}
+
+// Form interface - fix index signatures
+export type Form = { formValid: boolean } & { [input: string]: InputText | Select | InputDate | Textarea | any }
+
+// Data from form in object
+export interface FormData {
+    [input: string]: { val: string }
 }

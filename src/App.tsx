@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import FormStructure from "containers/form/form";
 
 import useForm from "Hooks/useForm";
+
+import * as types from "./utils/enums";
 
 function App() {
   const [form, setForm, data] = useForm({
     email: {
       val: "",
-      type: "email",
-      inputType: "input",
+      type: types.TYPE.TEXT,
+      inputType: types.INPUT.INPUT,
       placeholder: "E-mail",
       label: "E-mail",
       validation: {
@@ -21,8 +23,8 @@ function App() {
     },
     password: {
       val: "",
-      type: "password",
-      inputType: "input",
+      type: types.TYPE.PASSWORD,
+      inputType: types.INPUT.INPUT,
       placeholder: "********",
       label: "Password",
       validation: {
@@ -36,8 +38,7 @@ function App() {
     formValid: false,
   });
 
-  const dupa = (e: any) => {
-    e.preventDefault();
+  const test = () => {
     console.log(data);
   };
   return (
@@ -48,7 +49,7 @@ function App() {
         setState={setForm}
         btnText="SIGN UP"
         title="Sign Up"
-        submitted={dupa}
+        submitted={test}
       />
     </span>
   );

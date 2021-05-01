@@ -63,7 +63,10 @@ const formStructure = (props: Props) => {
     <div className={styles.formWrapper}>
       <span className={styles.formTitle}>{props.title}</span>
       <form
-        onSubmit={(event) => props.submitted(event)}
+        onSubmit={(event) => {
+          event.preventDefault();
+          props.submitted();
+        }}
         className={styles.formColumn}
       >
         <div
