@@ -10,7 +10,7 @@ interface Props {
   inputName: string;
   placeholder: string;
   label: string;
-  validity: boolean;
+  valid: boolean;
   touched: boolean;
   stateMain: Form;
   onChangeInput: () => void;
@@ -20,7 +20,7 @@ interface Props {
 const input: React.FC<Props> = (props) => {
   // Mutate input classes if field is invalid
   let inputClasses: string[] = [styles.inputContainer];
-  if (!props.validity && props.touched) {
+  if (!props.valid && props.touched) {
     inputClasses = [styles.inputContainer, styles.invalidInput];
   }
   // props.inputType === "select"
