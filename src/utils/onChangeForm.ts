@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+import { Form, FormData } from "utils/types";
 interface Rules {
     required?: boolean;
     minLength?: number;
@@ -12,7 +14,7 @@ interface Rules {
   @param {rules} - object with validation rules
 */
 export const validation = (value: string, rules?: Rules) => {
-    let isValid: any = true;
+    let isValid: boolean = true;
     if (!rules) {
         return true;
     }
@@ -20,24 +22,15 @@ export const validation = (value: string, rules?: Rules) => {
         isValid = value.trim() !== "" && isValid;
     }
     if (rules.minLength) {
-        isValid = value.length >= rules.minLength && isValid;
+        isValid = value.trim().length >= rules.minLength && isValid;
     }
     if (rules.maxLength) {
-        isValid = value.length <= rules.maxLength && isValid;
+        isValid = value.trim().length <= rules.maxLength && isValid;
     }
 
     if (rules.minDate) {
         isValid = new Date(value) >= rules.minDate && isValid;
     }
-    /* 
-        if (rules.validPassword) {
-            console.log(value);
-            isValid = value.match(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/) && isValid;
-        }
-    
-        if (rules.validEmail) {
-            isValid = value.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/) && isValid;
-        } */
 
     return isValid;
 };
@@ -45,7 +38,7 @@ export const validation = (value: string, rules?: Rules) => {
 /* Check if every input is valid
   @param {fields} - object with all form fields
 */
-export const wholeFormValidity = (fields: any) => {
+export const wholeFormValidity = (fields: Form) => {
     let key: keyof typeof fields;
     for (key in fields) {
         if (fields[key].valid === false) {
@@ -56,58 +49,26 @@ export const wholeFormValidity = (fields: any) => {
 };
 
 /* Mutate state
-  @param {e} - target of the event
+  @param {value} - input current value
   @param {inputType} - type of input which is object key in state
   @params {stateCopy} - state
   @param {valid} - value which represents validity of whole form
-  @param {passwordCheck} - boolean value to pass if we have to check if passwords are matching
 */
 export const mutateState = (
-    e: { target: HTMLInputElement },
+    value: string,
     inputType: string,
-    stateCopy: any,
+    stateCopy: Form,
     valid: boolean,
-    passwordCheck?: boolean,
 ) => {
-    let inputFields;
-    if (inputType === "password" && passwordCheck) {
-        inputFields = {
-            ...stateCopy,
-            [inputType]: {
-                ...stateCopy[inputType],
-                val: e.target.value,
-                valid: valid,
-                touched: e.target.value.length > 0,
-            },
-            confirmPassword: {
-                ...stateCopy.confirmPassword,
-                valid: valid,
-            },
-        };
-    } else if (inputType === "confirmPassword" && passwordCheck) {
-        valid = valid && e.target.value === stateCopy.password.val;
-        inputFields = {
-            ...stateCopy,
-            [inputType]: {
-                ...stateCopy[inputType],
-                val: e.target.value,
-                valid: valid,
-                touched: e.target.value.length > 0,
-            }
-        };
-    } else {
-        inputFields = {
-            ...stateCopy,
-            [inputType]: {
-                ...stateCopy[inputType],
-                val: e.target.value,
-                valid: valid,
-                touched: e.target.value !== "",
-            },
-        };
-    }
-
-    return inputFields;
+    return {
+        ...stateCopy,
+        [inputType]: {
+            ...stateCopy[inputType],
+            val: value,
+            valid: valid,
+            touched: value !== "",
+        },
+    };;
 };
 
 
@@ -117,7 +78,7 @@ export const mutateState = (
     @param {state} - state
     @param {checkPass} - boolean value to pass if we have to check if passwords are matching
 */
-export const onChangeForm = (e: { target: HTMLInputElement }, inputType: any, state: any, setState: any, checkPass?: boolean) => {
+const onChangeForm = (e: { target: HTMLInputElement }, inputType: string, state: Form, setState: Dispatch<SetStateAction<Form>>): boolean => {
 
     const stateCopy = { ...state };
     const inputField = {
@@ -125,27 +86,23 @@ export const onChangeForm = (e: { target: HTMLInputElement }, inputType: any, st
     }
 
     const valid: boolean = validation(e.target.value, inputField.validation);
-    const updatedFields = mutateState(e, inputType, stateCopy, valid, checkPass);
-    const validForm = wholeFormValidity(updatedFields);
+    const updatedFields: Form = mutateState(e.target.value, inputType, stateCopy, valid);
+    const validForm: boolean = wholeFormValidity(updatedFields);
 
-    setState((prevState: any) => {
+    setState((prevState: Form) => {
         return {
             ...prevState,
             ...updatedFields,
-            formValid: validForm
         }
     })
-
+    return validForm;
 }
 
 
-export const mutateToAxios = (state: any) => {
-    const formData: any = {};
+export const mutateToAxios = (state: Form) => {
+    const formData: FormData = {};
     let key: keyof typeof state;
     for (key in state) {
-        if (key === 'formValid') {
-            break
-        }
         formData[key] = state[key].val;
     }
     return formData;

@@ -67,12 +67,12 @@ export interface SelectValidation {
     required: boolean;
 }
 export interface SelectOption {
-    optionVal: string;
-    optionName: string;
+    name: string;
+    val: string;
 }
 
 export interface SelectOptionName {
-    name: SelectOption;
+    [name: string]: SelectOption;
 }
 
 export interface Select {
@@ -80,15 +80,17 @@ export interface Select {
     inputType: type.SELECT;
     label: string;
     valid: boolean;
-    validation: SelectValidation;
+    options: SelectOptionName;
+    validation?: SelectValidation;
     errorMessage?: string;
-    options: SelectOptionName[];
 }
 
 // Form interface - fix index signatures
-export type Form = { formValid: boolean } & { [input: string]: InputText | Select | InputDate | Textarea | any }
+export interface Form {
+    [input: string]: Select | InputText | InputDate | Textarea;
+}
 
 // Data from form in object
 export interface FormData {
-    [input: string]: { val: string }
+    [input: string]: string;
 }

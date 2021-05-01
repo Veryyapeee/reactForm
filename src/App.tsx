@@ -36,7 +36,7 @@ function App() {
       valid: false,
     },
     costam: {
-      val: "",
+      val: "xD",
       inputType: types.SELECT.SELECT,
       label: "whatever",
       valid: true,
@@ -52,7 +52,7 @@ function App() {
       },
     },
     costam2: {
-      val: "",
+      val: "xD2",
       valid: true,
       inputType: types.SELECT.SELECT,
       label: "whatever",
@@ -67,7 +67,6 @@ function App() {
         },
       },
     },
-    formValid: false,
   });
 
   const test = () => {

@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Input from "components/input/input";
 import Button from "components/button/button";
 
-import onChangeForm from "utils/onChangeForm";
+import onChangeForm, { wholeFormValidity } from "utils/onChangeForm";
 interface Props {
   config: any;
   setConfig: any;
@@ -22,7 +22,9 @@ interface Element {
 
 type E = React.FormEvent<HTMLFormElement>;
 
-const formStructure: React.FC<Props> = (props) => {
+const FormStructure: React.FC<Props> = (props) => {
+  const [validForm, setValidForm] = useState(wholeFormValidity(props.config));
+
   // Get input config
   let key: typeof props.config;
   let elements = [];
@@ -39,29 +41,21 @@ const formStructure: React.FC<Props> = (props) => {
     event: { target: HTMLInputElement },
     inputType: typeof props.config
   ) => {
-    onChangeForm(
-      event,
-      inputType,
-      props.config,
-      props.setConfig,
-      props.checkPass
-    );
+    setValidForm(onChangeForm(event, inputType, props.config, props.setConfig));
   };
 
   // Create inputs for form
-  const formElements = elements.map((input: Element) => {
-    return (
-      <Input
-        key={input.id}
-        onChangeInput={(e: { target: HTMLInputElement }) =>
-          onChangeInput(e, input.id)
-        }
-        inputName={input.name}
-        {...input.config}
-        stateMain={props.config}
-      />
-    );
-  });
+  const formElements = elements.map((input: Element) => (
+    <Input
+      key={input.id}
+      onChangeInput={(e: { target: HTMLInputElement }) =>
+        onChangeInput(e, input.id)
+      }
+      inputName={input.name}
+      {...input.config}
+      stateMain={props.config}
+    />
+  ));
 
   return (
     <div>
@@ -73,10 +67,10 @@ const formStructure: React.FC<Props> = (props) => {
         }}
       >
         <div>{formElements}</div> {props.children}
-        <Button disabled={!props.config.formValid}>{props.buttonTitle}</Button>
+        <Button disabled={!validForm}>{props.buttonTitle}</Button>
       </form>
     </div>
   );
 };
 
-export default formStructure;
+export default FormStructure;

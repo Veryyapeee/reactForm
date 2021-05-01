@@ -2,7 +2,7 @@ import React from "react";
 
 import styles from "./input.module.scss";
 
-import { Form } from "utils/types";
+import { Form, Select } from "utils/types";
 interface Props {
   type: string;
   inputType: string;
@@ -23,12 +23,14 @@ const input: React.FC<Props> = (props) => {
   if (!props.validity && props.touched) {
     inputClasses = [styles.inputContainer, styles.invalidInput];
   }
-
+  // props.inputType === "select"
   // Setup select options
   let selectOptions = [];
+
   if (props.inputType === "select") {
-    for (let key in props.stateMain[props.inputName].options) {
-      selectOptions.push(props.stateMain[props.inputName].options[key]);
+    const state = props.stateMain[props.inputName] as Select;
+    for (let key in state.options) {
+      selectOptions.push(state.options[key]);
     }
   }
 
@@ -76,16 +78,11 @@ const input: React.FC<Props> = (props) => {
               onChange={props.onChangeInput}
               className={styles.select}
             >
-              <option value="" selected disabled hidden>
-                Choose
-              </option>
-              {selectOptions.map((option) => {
-                return (
-                  <option value={option.val} key={option.val}>
-                    {option.name}
-                  </option>
-                );
-              })}
+              {selectOptions.map((option) => (
+                <option value={option.val} key={option.val}>
+                  {option.name}
+                </option>
+              ))}
             </select>
           </label>
         </div>
