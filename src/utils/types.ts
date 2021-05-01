@@ -9,7 +9,7 @@ export interface ValidationInputText {
     maxLength?: number;
     validEmail?: boolean;
     validPassword?: boolean;
-    checkPasswordMatch?: boolean
+    refToCheckMatch?: string;
 }
 
 export interface InputText {

@@ -44,8 +44,6 @@ const FormStructure: React.FC<Props> = (props) => {
     setValidForm(onChangeForm(event, inputType, props.config, props.setConfig));
   };
 
-  console.log(elements);
-
   // Create inputs for form
   const formElements = elements.map((input: Element) => (
     <Input

@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { Form, FormData } from "utils/types";
+import { Form, FormData, InputText } from "utils/types";
 interface Rules {
     required?: boolean;
     minLength?: number;
@@ -7,6 +7,7 @@ interface Rules {
     minDate?: Date;
     validEmail?: boolean;
     validPassword?: boolean;
+    refToCheckMatch?: string;
 }
 
 /* Input data validation 
@@ -60,6 +61,43 @@ export const mutateState = (
     stateCopy: Form,
     valid: boolean,
 ) => {
+    console.log(value);
+    const stateText = stateCopy[inputType] as InputText;
+    if (stateText.validation!.refToCheckMatch) {
+        const stateSecond = stateCopy[stateText.validation!.refToCheckMatch] as InputText;
+        if (stateText.val !== stateSecond.val) {
+            return {
+                ...stateCopy,
+                [inputType]: {
+                    ...stateText,
+                    val: value,
+                    valid: false,
+                    touched: value !== "",
+                },
+                [stateText.validation!.refToCheckMatch]: {
+                    ...stateSecond,
+                    valid: false,
+                    touched: value !== "",
+                }
+            }
+        } else {
+            return {
+                ...stateCopy,
+                [inputType]: {
+                    ...stateText,
+                    val: value,
+                    valid: true,
+                    touched: value !== "",
+                },
+                [stateText.validation!.refToCheckMatch]: {
+                    ...stateSecond,
+                    valid: true,
+                    touched: value !== "",
+                }
+            }
+        }
+    }
+
     return {
         ...stateCopy,
         [inputType]: {
@@ -68,7 +106,7 @@ export const mutateState = (
             valid: valid,
             touched: value !== "",
         },
-    };;
+    };
 };
 
 
@@ -95,6 +133,7 @@ const onChangeForm = (e: { target: HTMLInputElement }, inputType: string, state:
             ...updatedFields,
         }
     })
+    console.log(state);
     return validForm;
 }
 

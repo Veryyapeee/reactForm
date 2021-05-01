@@ -6,7 +6,7 @@ import { Form, Select } from "utils/types";
 interface Props {
   type: string;
   inputType: string;
-  inputValue: string;
+  val: string;
   inputName: string;
   placeholder: string;
   label: string;
@@ -46,7 +46,7 @@ const input: React.FC<Props> = (props) => {
               className={styles.input}
               type={props.type}
               placeholder={props.placeholder}
-              value={props.inputValue}
+              value={props.val}
               onChange={props.onChangeInput}
             />
           </label>
@@ -61,7 +61,7 @@ const input: React.FC<Props> = (props) => {
             <textarea
               className={[styles.input, styles.textarea].join(" ")}
               placeholder={props.placeholder}
-              value={props.inputValue}
+              value={props.val}
               onChange={props.onChangeInput}
             />
           </label>
@@ -74,7 +74,7 @@ const input: React.FC<Props> = (props) => {
           <span className={styles.label}>{props.label}</span>
           <label className={inputClasses.join(" ")}>
             <select
-              value={props.inputValue}
+              value={props.val}
               onChange={props.onChangeInput}
               className={styles.select}
             >
