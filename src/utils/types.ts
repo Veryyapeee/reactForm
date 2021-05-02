@@ -7,9 +7,7 @@ export interface ValidationInputText {
     required?: boolean;
     minLength?: number;
     maxLength?: number;
-    validEmail?: boolean;
-    validPassword?: boolean;
-    refToCheckMatch?: string;
+    refToMatch?: string;
 }
 
 export interface InputText {

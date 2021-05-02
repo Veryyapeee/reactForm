@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Input from "components/input/input";
 import Button from "components/button/button";
@@ -24,28 +24,33 @@ type E = React.FormEvent<HTMLFormElement>;
 
 const FormStructure: React.FC<Props> = (props) => {
   const [validForm, setValidForm] = useState(wholeFormValidity(props.config));
+  const [state, setState] = useState(props.config);
+
+  useEffect(() => {
+    setState(props.config);
+  }, [props.config, state]);
 
   // Get input config
-  let key: typeof props.config;
-  let elements = [];
-  for (key in props.config) {
+  let key: typeof state;
+  let elements: any = [];
+  for (key in state) {
     elements.push({
       id: key,
       name: key,
-      config: props.config[key],
+      config: state[key],
     });
   }
 
   // Function for mutate, validate and return new state when change input value
   const onChangeInput = (
     event: { target: HTMLInputElement },
-    inputType: typeof props.config
+    inputType: typeof state
   ) => {
-    setValidForm(onChangeForm(event, inputType, props.config, props.setConfig));
+    setValidForm(onChangeForm(event, inputType, state, props.setConfig));
   };
 
   // Create inputs for form
-  const formElements = elements.map((input: Element) => (
+  let formElements = elements.map((input: Element) => (
     <Input
       key={input.id}
       onChangeInput={(e: { target: HTMLInputElement }) =>
@@ -53,7 +58,7 @@ const FormStructure: React.FC<Props> = (props) => {
       }
       inputName={input.name}
       {...input.config}
-      stateMain={props.config}
+      stateMain={state}
     />
   ));
 

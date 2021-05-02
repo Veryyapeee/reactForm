@@ -5,9 +5,6 @@ interface Rules {
     minLength?: number;
     maxLength?: number;
     minDate?: Date;
-    validEmail?: boolean;
-    validPassword?: boolean;
-    refToCheckMatch?: string;
 }
 
 /* Input data validation 
@@ -59,40 +56,25 @@ export const mutateState = (
     value: string,
     inputType: string,
     stateCopy: Form,
-    valid: boolean,
+    validity: boolean,
 ) => {
-    console.log(value);
-    const stateText = stateCopy[inputType] as InputText;
-    if (stateText.validation!.refToCheckMatch) {
-        const stateSecond = stateCopy[stateText.validation!.refToCheckMatch] as InputText;
-        if (stateText.val !== stateSecond.val) {
+
+    const state = stateCopy[inputType] as InputText;
+    if (state.validation) {
+        if (state.validation.refToMatch) {
+            const secondState = stateCopy[state.validation!.refToMatch];
+            console.log(state.val === secondState.val && validity);
             return {
                 ...stateCopy,
                 [inputType]: {
-                    ...stateText,
+                    ...stateCopy[inputType],
                     val: value,
-                    valid: false,
-                    touched: value !== "",
+                    valid: state.val === secondState.val && validity,
+                    touched: value !== '',
                 },
-                [stateText.validation!.refToCheckMatch]: {
-                    ...stateSecond,
-                    valid: false,
-                    touched: value !== "",
-                }
-            }
-        } else {
-            return {
-                ...stateCopy,
-                [inputType]: {
-                    ...stateText,
-                    val: value,
-                    valid: true,
-                    touched: value !== "",
-                },
-                [stateText.validation!.refToCheckMatch]: {
-                    ...stateSecond,
-                    valid: true,
-                    touched: value !== "",
+                [state.validation!.refToMatch]: {
+                    ...stateCopy[state.validation!.refToMatch],
+                    valid: state.val === secondState.val && validity,
                 }
             }
         }
@@ -103,7 +85,7 @@ export const mutateState = (
         [inputType]: {
             ...stateCopy[inputType],
             val: value,
-            valid: valid,
+            valid: validity,
             touched: value !== "",
         },
     };
@@ -116,9 +98,14 @@ export const mutateState = (
     @param {state} - state
     @param {checkPass} - boolean value to pass if we have to check if passwords are matching
 */
-const onChangeForm = (e: { target: HTMLInputElement }, inputType: string, state: Form, setState: Dispatch<SetStateAction<Form>>): boolean => {
-
-    const stateCopy = { ...state };
+const OnChangeForm = (e: { target: HTMLInputElement }, inputType: string, state: Form, setState: Dispatch<SetStateAction<Form>>): boolean => {
+    /* console.log(state); */
+    const stateCopy = {
+        ...state, [inputType]: {
+            ...state[inputType],
+            val: e.target.value
+        }
+    };
     const inputField = {
         ...stateCopy[inputType]
     }
@@ -127,13 +114,13 @@ const onChangeForm = (e: { target: HTMLInputElement }, inputType: string, state:
     const updatedFields: Form = mutateState(e.target.value, inputType, stateCopy, valid);
     const validForm: boolean = wholeFormValidity(updatedFields);
 
-    setState((prevState: Form) => {
+    setState((prevState: any) => {
         return {
             ...prevState,
-            ...updatedFields,
+            ...updatedFields
         }
-    })
-    console.log(state);
+    });
+
     return validForm;
 }
 
@@ -147,4 +134,4 @@ export const mutateToAxios = (state: Form) => {
     return formData;
 }
 
-export default onChangeForm;
+export default OnChangeForm;
