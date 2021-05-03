@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, SetStateAction, Dispatch } from "react";
 
 import Input from "components/input/input";
 import Button from "components/button/button";
 
 import onChangeForm, { wholeFormValidity } from "utils/onChangeForm";
+import { Form } from "utils/types";
 interface Props {
-  config: any;
-  setConfig: any;
+  config: Form;
+  setConfig: Dispatch<SetStateAction<Form>>;
   buttonTitle: string;
   onSubmit: () => void;
   formTitle?: string;
   children?: JSX.Element | JSX.Element[] | string;
-  checkPass?: boolean;
 }
 
 interface Element {
@@ -23,16 +23,20 @@ interface Element {
 type E = React.FormEvent<HTMLFormElement>;
 
 const FormStructure: React.FC<Props> = (props) => {
-  const [validForm, setValidForm] = useState(wholeFormValidity(props.config));
-  const [state, setState] = useState(props.config);
+  // State for valid form and temp state to deal with async useState
+  const [validForm, setValidForm] = useState<boolean>(
+    wholeFormValidity(props.config)
+  );
+  const [state, setState] = useState<Form>(props.config);
 
+  // Refresh state to update sync
   useEffect(() => {
     setState(props.config);
   }, [props.config, state]);
 
   // Get input config
-  let key: typeof state;
-  let elements: any = [];
+  let key: string;
+  let elements = [];
   for (key in state) {
     elements.push({
       id: key,
@@ -44,7 +48,7 @@ const FormStructure: React.FC<Props> = (props) => {
   // Function for mutate, validate and return new state when change input value
   const onChangeInput = (
     event: { target: HTMLInputElement },
-    inputType: typeof state
+    inputType: string
   ) => {
     setValidForm(onChangeForm(event, inputType, state, props.setConfig));
   };

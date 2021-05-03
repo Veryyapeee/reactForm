@@ -5,6 +5,8 @@ interface Rules {
     minLength?: number;
     maxLength?: number;
     minDate?: Date;
+    emailComplexity?: boolean;
+    passwordComplexity?: boolean;
 }
 
 /* Input data validation 
@@ -12,7 +14,7 @@ interface Rules {
   @param {rules} - object with validation rules
 */
 export const validation = (value: string, rules?: Rules) => {
-    let isValid: boolean = true;
+    let isValid: boolean | null = true;
     if (!rules) {
         return true;
     }
@@ -30,7 +32,15 @@ export const validation = (value: string, rules?: Rules) => {
         isValid = new Date(value) >= rules.minDate && isValid;
     }
 
-    return isValid;
+    if (rules.passwordComplexity) {
+        isValid = value.match(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?\W).*$/) && isValid;
+    }
+
+    if (rules.emailComplexity) {
+        isValid = value.match(/\S+@\S+\.\S+/) && isValid;
+    }
+
+    return isValid === null ? false : isValid;
 };
 
 /* Check if every input is valid
@@ -50,7 +60,7 @@ export const wholeFormValidity = (fields: Form) => {
   @param {value} - input current value
   @param {inputType} - type of input which is object key in state
   @params {stateCopy} - state
-  @param {valid} - value which represents validity of whole form
+  @param {valid} - value which represents validity of current input
 */
 export const mutateState = (
     value: string,
@@ -63,12 +73,10 @@ export const mutateState = (
     if (state.validation) {
         if (state.validation.refToMatch) {
             const secondState = stateCopy[state.validation!.refToMatch];
-            console.log(state.val === secondState.val && validity);
             return {
                 ...stateCopy,
                 [inputType]: {
                     ...stateCopy[inputType],
-                    val: value,
                     valid: state.val === secondState.val && validity,
                     touched: value !== '',
                 },
@@ -84,7 +92,6 @@ export const mutateState = (
         ...stateCopy,
         [inputType]: {
             ...stateCopy[inputType],
-            val: value,
             valid: validity,
             touched: value !== "",
         },
@@ -99,33 +106,30 @@ export const mutateState = (
     @param {checkPass} - boolean value to pass if we have to check if passwords are matching
 */
 const OnChangeForm = (e: { target: HTMLInputElement }, inputType: string, state: Form, setState: Dispatch<SetStateAction<Form>>): boolean => {
-    /* console.log(state); */
+
+    // Make state copy with new value
     const stateCopy = {
         ...state, [inputType]: {
             ...state[inputType],
             val: e.target.value
         }
     };
-    const inputField = {
-        ...stateCopy[inputType]
-    }
 
-    const valid: boolean = validation(e.target.value, inputField.validation);
+    // Run validation and update functions
+    const valid: boolean = validation(e.target.value, stateCopy[inputType].validation);
     const updatedFields: Form = mutateState(e.target.value, inputType, stateCopy, valid);
     const validForm: boolean = wholeFormValidity(updatedFields);
 
-    setState((prevState: any) => {
-        return {
-            ...prevState,
-            ...updatedFields
-        }
-    });
+    // Set new state
+    setState(updatedFields);
 
+    // Return state of form validity
     return validForm;
 }
 
 
-export const mutateToAxios = (state: Form) => {
+// Mutate form data to object: val format
+export const mutateFormData = (state: Form) => {
     const formData: FormData = {};
     let key: keyof typeof state;
     for (key in state) {
