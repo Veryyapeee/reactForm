@@ -1,35 +1,40 @@
-import React, { FunctionComponent } from "react";
+import React from "react";
 
 import styles from "./input.module.scss";
 
+import { Form, Select } from "utils/types";
 interface Props {
   type: string;
   inputType: string;
-  inputValue: string;
+  val: string;
   inputName: string;
-  inputSelectName?: string;
   placeholder: string;
   label: string;
-  validity: boolean;
+  valid: boolean;
   touched: boolean;
-  state?: any;
+  stateMain: Form;
+  onChangeInput: () => void;
   errorMessage?: string;
-  onChangeInput: any;
 }
 
-const input: FunctionComponent<Props> = (props) => {
+const input: React.FC<Props> = (props) => {
+  // Mutate input classes if field is invalid
   let inputClasses: string[] = [styles.inputContainer];
-  if (!props.validity && props.touched) {
+  if (!props.valid && props.touched) {
     inputClasses = [styles.inputContainer, styles.invalidInput];
   }
-
+  // props.inputType === "select"
+  // Setup select options
   let selectOptions = [];
+
   if (props.inputType === "select") {
-    for (let key in props.state[props.inputName].options) {
-      selectOptions.push(props.state[props.inputName].options[key]);
+    const state = props.stateMain[props.inputName] as Select;
+    for (let key in state.options) {
+      selectOptions.push(state.options[key]);
     }
   }
 
+  // Generate input
   let input;
   switch (props.inputType) {
     case "input":
@@ -41,7 +46,7 @@ const input: FunctionComponent<Props> = (props) => {
               className={styles.input}
               type={props.type}
               placeholder={props.placeholder}
-              value={props.inputValue}
+              value={props.val}
               onChange={props.onChangeInput}
             />
           </label>
@@ -56,7 +61,7 @@ const input: FunctionComponent<Props> = (props) => {
             <textarea
               className={[styles.input, styles.textarea].join(" ")}
               placeholder={props.placeholder}
-              value={props.inputValue}
+              value={props.val}
               onChange={props.onChangeInput}
             />
           </label>
@@ -69,18 +74,15 @@ const input: FunctionComponent<Props> = (props) => {
           <span className={styles.label}>{props.label}</span>
           <label className={inputClasses.join(" ")}>
             <select
-              name={props.inputSelectName}
-              value={props.inputValue}
+              value={props.val}
               onChange={props.onChangeInput}
               className={styles.select}
             >
-              {selectOptions.map((option) => {
-                return (
-                  <option value={option.val} key={option.val}>
-                    {option.name}
-                  </option>
-                );
-              })}
+              {selectOptions.map((option) => (
+                <option value={option.val} key={option.val}>
+                  {option.name}
+                </option>
+              ))}
             </select>
           </label>
         </div>

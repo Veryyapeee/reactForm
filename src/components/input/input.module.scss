@@ -1,0 +1,38 @@
+.inputContainer {
+  border: 1px solid turquoise;
+  &:focus {
+    outline: none;
+    border: 1px solid turquoise;
+  }
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.input {
+  border: none;
+  &:focus {
+    border: none;
+    outline: none;
+  }
+}
+
+.input.textarea {
+}
+
+.select {
+}
+
+.label {
+}
+
+.invalidInput {
+  border: 2px solid red;
+  &:focus {
+    border: 2px solid red;
+  }
+}
