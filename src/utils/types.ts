@@ -1,4 +1,4 @@
-import * as type from './enums';
+import { InputType } from './enums';
 
 // Objects in custom Hook
 
@@ -14,8 +14,8 @@ export interface ValidationInputText {
 
 export interface InputText {
     val: string;
-    type: type.TYPE;
-    inputType: type.INPUT;
+    type: InputType;
+    inputType: InputType.INPUT;
     placeholder: string;
     label: string;
     touched: boolean;
@@ -33,8 +33,8 @@ export interface ValidationInputDate {
 
 export interface InputDate {
     val: string;
-    type: type.TYPEDATE;
-    inputType: type.INPUT;
+    type: InputType;
+    inputType: InputType.INPUT;
     placeholder: string;
     label: string;
     touched: boolean;
@@ -52,13 +52,27 @@ export interface ValidationTextarea {
 
 export interface Textarea {
     val: string;
-    inputType: type.TEXTAREA;
+    inputType: InputType.TEXTAREA;
     placeholder: string;
     label: string;
     touched: boolean;
     valid: boolean;
     errorMessage?: string;
     validation?: ValidationTextarea;
+}
+
+
+// File interface - upgrade every interface to make it works good
+export interface File {
+    val: any[];
+    type: InputType;
+    inputType: InputType.INPUT;
+    placeholder: string;
+    label: string;
+    touched: boolean;
+    valid: boolean;
+    errorMessage?: string;
+    validation?: ValidationInputDate;
 }
 
 // Select
@@ -77,7 +91,7 @@ export interface SelectOptionName {
 
 export interface Select {
     val: string;
-    inputType: type.SELECT;
+    inputType: InputType.SELECT;
     label: string;
     valid: boolean;
     options: SelectOptionName;
@@ -87,10 +101,10 @@ export interface Select {
 
 // Form interface - fix index signatures
 export interface Form {
-    [input: string]: Select | InputText | InputDate | Textarea;
+    [input: string]: Select | InputText | InputDate | Textarea | File;
 }
 
 // Data from form in object
 export interface FormData {
-    [input: string]: string;
+    [input: string]: string | any[];
 }

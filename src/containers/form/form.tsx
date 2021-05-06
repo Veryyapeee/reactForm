@@ -74,6 +74,7 @@ const FormStructure: React.FC<Props> = (props) => {
           event.preventDefault();
           props.onSubmit();
         }}
+        encType="multipart/form-data"
       >
         <div>{formElements}</div> {props.children}
         <Button disabled={!validForm}>{props.buttonTitle}</Button>

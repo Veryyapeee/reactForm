@@ -1,21 +1,9 @@
-// Enums
-export enum INPUT {
+export enum InputType {
     INPUT = 'input',
-}
-
-export enum TEXTAREA {
-    TEXTAREA = 'textarea'
-}
-
-export enum SELECT {
-    SELECT = 'select'
-}
-
-export enum TYPE {
+    TEXTAREA = 'textarea',
+    SELECT = 'select',
     TEXT = 'text',
-    PASSWORD = 'password'
-}
-
-export enum TYPEDATE {
-    DATE = 'date'
+    PASSWORD = 'password',
+    DATE = 'date',
+    FILE = 'file',
 }

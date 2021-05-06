@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { Form, FormData, InputText } from "utils/types";
+import { Form, FormData, InputText, File } from "utils/types";
 interface Rules {
     required?: boolean;
     minLength?: number;
@@ -106,6 +106,20 @@ export const mutateState = (
     @param {checkPass} - boolean value to pass if we have to check if passwords are matching
 */
 const OnChangeForm = (e: { target: HTMLInputElement }, inputType: string, state: Form, setState: Dispatch<SetStateAction<Form>>): boolean => {
+
+    // If we add file we have to make an array on change - later add touch and valid to this
+    const input = state[inputType] as File;
+    if (input.type === 'file') {
+        setState({
+            ...state,
+            [inputType]: {
+                ...input,
+                val: Array.from(e.target.files!)
+            }
+
+        })
+        return false;
+    }
 
     // Make state copy with new value
     const stateCopy = {
