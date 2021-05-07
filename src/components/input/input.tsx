@@ -15,6 +15,7 @@ interface Props {
   stateMain: Form;
   onChangeInput: () => void;
   errorMessage?: string;
+  multiple?: boolean;
 }
 
 const input: React.FC<Props> = (props) => {
@@ -43,6 +44,7 @@ const input: React.FC<Props> = (props) => {
         className={styles.input}
         type={props.type}
         onChange={props.onChangeInput}
+        multiple={props.multiple}
       />
     );
   } else {

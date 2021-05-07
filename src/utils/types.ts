@@ -63,16 +63,21 @@ export interface Textarea {
 
 
 // File interface - upgrade every interface to make it works good
-export interface File {
-    val: any[];
+
+export interface ValidationFile {
+    fileCount?: number,
+    maxSize?: number,
+    fileTypes?: string[],
+}
+export interface FileForm {
+    val: File[] | [];
     type: InputType;
     inputType: InputType.INPUT;
-    placeholder: string;
-    label: string;
     touched: boolean;
     valid: boolean;
+    multiple?: true;
     errorMessage?: string;
-    validation?: ValidationInputDate;
+    validation?: ValidationFile;
 }
 
 // Select
@@ -101,10 +106,10 @@ export interface Select {
 
 // Form interface - fix index signatures
 export interface Form {
-    [input: string]: Select | InputText | InputDate | Textarea | File;
+    [input: string]: Select | InputText | InputDate | Textarea | FileForm | any;
 }
 
 // Data from form in object
 export interface FormData {
-    [input: string]: string | any[];
+    [input: string]: string | File[];
 }

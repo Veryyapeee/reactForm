@@ -26,15 +26,12 @@ function App() {
       val: [],
       type: InputType.FILE,
       inputType: InputType.INPUT,
-      placeholder: "xD",
-      label: "xD",
-      validation: {
-        required: true,
-        minLength: 5,
-        maxLength: 50,
-      },
       touched: false,
-      valid: false,
+      valid: true,
+      validation: {
+        fileCount: 2,
+      },
+      multiple: true,
     },
     password: {
       val: "",

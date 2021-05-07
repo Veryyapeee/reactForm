@@ -3,7 +3,9 @@ import React, { useState, useEffect, SetStateAction, Dispatch } from "react";
 import Input from "components/input/input";
 import Button from "components/button/button";
 
-import onChangeForm, { wholeFormValidity } from "utils/onChangeForm";
+import onChangeForm from "utils/onChangeForm";
+import { wholeFormValidity } from "utils/validation";
+
 import { Form } from "utils/types";
 interface Props {
   config: Form;
