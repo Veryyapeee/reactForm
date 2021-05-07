@@ -3,14 +3,14 @@ import FormStructure from "containers/form/form";
 
 import useForm from "Hooks/useForm";
 
-import * as types from "./utils/enums";
+import { InputType } from "./utils/enums";
 
 function App() {
   const [form, setForm, data] = useForm({
     email: {
       val: "",
-      type: types.TYPE.TEXT,
-      inputType: types.INPUT.INPUT,
+      type: InputType.TEXT,
+      inputType: InputType.INPUT,
       placeholder: "E-mail",
       label: "E-mail",
       validation: {
@@ -22,10 +22,21 @@ function App() {
       touched: false,
       valid: false,
     },
+    file: {
+      val: [],
+      type: InputType.FILE,
+      inputType: InputType.INPUT,
+      touched: false,
+      valid: true,
+      validation: {
+        fileCount: 2,
+      },
+      multiple: true,
+    },
     password: {
       val: "",
-      type: types.TYPE.PASSWORD,
-      inputType: types.INPUT.INPUT,
+      type: InputType.PASSWORD,
+      inputType: InputType.INPUT,
       placeholder: "********",
       label: "Password",
       validation: {
@@ -40,8 +51,8 @@ function App() {
     },
     confirmPassword: {
       val: "",
-      type: types.TYPE.PASSWORD,
-      inputType: types.INPUT.INPUT,
+      type: InputType.PASSWORD,
+      inputType: InputType.INPUT,
       placeholder: "********",
       label: "ConfirmPassword",
       validation: {
@@ -56,7 +67,7 @@ function App() {
     },
     costam: {
       val: "xD",
-      inputType: types.SELECT.SELECT,
+      inputType: InputType.SELECT,
       label: "whatever",
       valid: true,
       options: {
@@ -73,7 +84,7 @@ function App() {
     costam2: {
       val: "xD2",
       valid: true,
-      inputType: types.SELECT.SELECT,
+      inputType: InputType.SELECT,
       label: "whatever",
       options: {
         option1: {
