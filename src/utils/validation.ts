@@ -13,6 +13,7 @@ interface FileRules {
     fileCount?: number,
     maxSize?: number,
     fileTypes?: string[],
+    required?: boolean,
 }
 
 /* Input data validation 
@@ -55,6 +56,9 @@ export const validation = (value: string, rules?: Rules) => {
 */
 export const fileValidation = (rules: FileRules, files: File[]) => {
     let isValid: boolean | undefined = true;
+    if (rules.required) {
+        isValid = files.length > 0 && isValid;
+    }
     if (rules.fileCount) {
         isValid = files.length <= rules.fileCount && isValid;
     }
