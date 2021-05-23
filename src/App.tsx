@@ -27,10 +27,11 @@ function App() {
       type: InputType.FILE,
       inputType: InputType.INPUT,
       touched: false,
-      valid: true,
       validation: {
+        required: true,
         fileCount: 2,
       },
+      valid: false,
       multiple: true,
     },
     password: {
@@ -112,6 +113,10 @@ function App() {
         formTitle="Sign Up"
         onSubmit={test}
       />
+      {/* The way to handle files */}
+      {data.file.length > 0 && (
+        <img src={URL.createObjectURL(data.file[0])} alt="xd" />
+      )}
     </span>
   );
 }
