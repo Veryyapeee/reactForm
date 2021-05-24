@@ -12,8 +12,6 @@ interface Props {
   setConfig: Dispatch<SetStateAction<Form>>;
   buttonTitle: string;
   onSubmit: () => void;
-  formTitle?: string;
-  children?: JSX.Element | JSX.Element[] | string;
 }
 
 interface Element {
@@ -24,17 +22,22 @@ interface Element {
 
 type E = React.FormEvent<HTMLFormElement>;
 
-const FormStructure: React.FC<Props> = (props) => {
+const FormStructure: React.FC<Props> = ({
+  config,
+  setConfig,
+  buttonTitle,
+  onSubmit,
+}) => {
   // State for valid form and temp state to deal with async useState
   const [validForm, setValidForm] = useState<boolean>(
-    wholeFormValidity(props.config)
+    wholeFormValidity(config)
   );
-  const [state, setState] = useState<Form>(props.config);
+  const [state, setState] = useState<Form>(config);
 
   // Refresh state to update sync
   useEffect(() => {
-    setState(props.config);
-  }, [props.config, state]);
+    setState(config);
+  }, [config, state]);
 
   // Get input config
   let key: string;
@@ -52,7 +55,7 @@ const FormStructure: React.FC<Props> = (props) => {
     event: { target: HTMLInputElement },
     inputType: string
   ) => {
-    setValidForm(onChangeForm(event, inputType, state, props.setConfig));
+    setValidForm(onChangeForm(event, inputType, state, setConfig));
   };
 
   // Create inputs for form
@@ -69,19 +72,16 @@ const FormStructure: React.FC<Props> = (props) => {
   ));
 
   return (
-    <div>
-      <span>{props.formTitle}</span>
-      <form
-        onSubmit={(event: E) => {
-          event.preventDefault();
-          props.onSubmit();
-        }}
-        encType="multipart/form-data"
-      >
-        <div>{formElements}</div> {props.children}
-        <Button disabled={!validForm}>{props.buttonTitle}</Button>
-      </form>
-    </div>
+    <form
+      onSubmit={(event: E) => {
+        event.preventDefault();
+        onSubmit();
+      }}
+      encType="multipart/form-data"
+    >
+      {formElements}
+      <Button disabled={!validForm}>{buttonTitle}</Button>
+    </form>
   );
 };
 
